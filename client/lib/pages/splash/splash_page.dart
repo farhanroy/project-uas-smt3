@@ -8,6 +8,7 @@ class SplashPage extends GetView<SplashController> {
 
   @override
   Widget build(BuildContext context) {
+    controller.checkUserExist();
     return const Scaffold(
       body: Center(
         child: Text(

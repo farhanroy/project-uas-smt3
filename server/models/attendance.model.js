@@ -6,6 +6,7 @@ const Attendance = mongoose.model(
     name: String,
     nrp: String,
     nameEvent: String,
+    idEvent: String,
     time: { type: Date, default: Date.now },
     status: String
   })

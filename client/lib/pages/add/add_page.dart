@@ -10,6 +10,13 @@ class AddPage extends GetView<AddController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.blue,
+        title: const Text('Tambah Event'),
+        leading: IconButton(
+            onPressed: () => Get.back(),
+            icon: const Icon(Icons.arrow_back)),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

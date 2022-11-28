@@ -9,5 +9,7 @@ module.exports = function (app) {
 
   app.post("/api/attendance/add", [authJwt.verifyToken], controller.addAttendance);
 
+  app.post("/api/attendance/delete", [authJwt.verifyToken], controller.deleteAttendance);
+
   app.get("/api/attendance/all", [authJwt.verifyToken, checkComitee.verifyComitee], controller.getAllAttendance);
 };

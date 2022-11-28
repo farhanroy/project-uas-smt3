@@ -1,11 +1,8 @@
 import 'package:client/routes/app_routes.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../utils/helper.dart';
-import '../../utils/styles.dart';
 import 'profile_controller.dart';
 
 class ProfilePage extends GetView<ProfileController> {
@@ -13,101 +10,67 @@ class ProfilePage extends GetView<ProfileController> {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
-  }
-}
-
-class ProfileView extends StatefulWidget {
-  const ProfileView({Key? key}) : super(key: key);
-
-  @override
-  State<ProfileView> createState() => _ProfileViewState();
-}
-
-class _ProfileViewState extends State<ProfileView> {
-
-  List<String> list = [];
-
-  @override
-  void initState() {
-    super.initState();
-    Future.wait([getUserData()]);
-  }
-
-  Future<void> getUserData() async {
-    final pref = await SharedPreferences.getInstance();
-    final data = pref.getStringList('data');
-    setState(() {
-      list = data!;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
+    controller.getData();
     return Scaffold(
-      backgroundColor: const Color(0XFFF7F4F4),
-      appBar: AppBar(
-        systemOverlayStyle: const SystemUiOverlayStyle(
-          // Status bar color
-          statusBarColor: Styles.primaryColor,
+        appBar: AppBar(
+          backgroundColor: Colors.blue,
+          title: const Text('Profil'),
+          leading: IconButton(
+              onPressed: () => Get.back(),
+              icon: const Icon(Icons.arrow_back)),
         ),
-        leading: IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: const Icon(Icons.arrow_back)
-        ),
-        title: const Text('Profile'),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(height: 56),
-            Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 28),
-                child: Builder(
-                    builder: (context) {
-                      if (list.isNotEmpty) {
-                        return Column(
-                          children: [
-                            _ProfileItem(title: "Nama", content: list[0]),
-                            _ProfileItem(title: "Email", content: list[1]),
-                            _ProfileItem(title: "NRP", content: list[2]),
-                          ],
-                        );
-                      } else {
-                        return const Text('data tidak ada');
-                      }
-                    }
-                )
-            ),
-            const SizedBox(height: 56),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 72.0),
-              child: OutlinedButton(
-                  onPressed: () => {
-                    Helper.deletePreference('data')
-                        .then((value) => Get.offNamed(AppRoutes.splash))
-                  },
-                  style: OutlinedButton.styleFrom(
-                    primary: Colors.red,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(Icons.logout),
-                      Text('Logout')
-                    ],
-                  )
+      body: controller.obx(
+              (state) => SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 56),
+                    Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 28),
+                        child: Builder(
+                            builder: (context) {
+                              return Column(
+                                children: [
+                                  _ProfileItem(title: "Nama", content: controller.state![2]),
+                                  _ProfileItem(title: "Email", content: controller.state![3]),
+                                  _ProfileItem(title: "NRP", content: controller.state![4]),
+                                ],
+                              );
+                            }
+                        )
+                    ),
+                    const SizedBox(height: 56),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 72.0),
+                      child: OutlinedButton(
+                          onPressed: () => {
+                            controller.logout().then((value) {
+                              Get.offNamed(AppRoutes.splash);
+                            })
+                          },
+                          style: OutlinedButton.styleFrom(
+                            primary: Colors.red,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IconButton(
+                                  onPressed: () => controller.logout(),
+                                  icon: const Icon(Icons.logout)
+                              ),
+                              Text('Logout')
+                            ],
+                          )
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
-        ),
-      ),
+        onLoading: Center(child: const CircularProgressIndicator())
+      )
     );
   }
 }
-
-
 
 class _ProfileItem extends StatelessWidget {
   final String title;

@@ -17,6 +17,7 @@ class AddController extends GetxController with StateMixin<String> {
     change('', status: RxStatus.loading());
     try {
       final result = await _appService.addEvent(name.value, start.value, end.value);
+      Get.back();
       change('', status: RxStatus.success());
       Get.back();
     } catch (e) {

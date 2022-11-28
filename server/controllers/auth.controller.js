@@ -22,10 +22,16 @@ exports.signup = (req, res) => {
       expiresIn: 86400, // 24 hours
     });
 
-    res.send({ 
+     res.status(200).send({
       message: "User was registered successfully!",
+      data: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        nrp: user.nrp,
+      },
       token: token
-     });
+    });
   });
 };
 

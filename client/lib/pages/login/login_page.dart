@@ -1,3 +1,4 @@
+import 'package:client/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -11,10 +12,11 @@ class LoginPage extends GetView<LoginController> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(height: 56),
             Text(
                 "Masuk",
                 style: const TextStyle(
@@ -42,6 +44,7 @@ class LoginPage extends GetView<LoginController> {
             CommonTextField(
               Lone: "Password",
               Htwo: "Password",
+              isObscure: true,
               onChanged: (val) => controller.passwordChanged(val),
             ),
             const SizedBox(height: 20),
@@ -49,6 +52,17 @@ class LoginPage extends GetView<LoginController> {
               onPressed: () => controller.submit(),
               child: const Text("Login"),
             ),
+            const SizedBox(height: 56.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('Belum memiliki akun ?'),
+                TextButton(
+                  onPressed: () => Get.toNamed(AppRoutes.register),
+                  child: const Text("Daftar"),
+                ),
+              ],
+            )
           ],
         ),
       ),
